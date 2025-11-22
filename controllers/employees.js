@@ -85,7 +85,7 @@ const updateEmployee = async(req, res) => {
         // If the department exists, proceed to update the employee
         const response = await mongodb.getDatabase().db().collection('employees').replaceOne({_id: employeeId},employee);
         if (response.modifiedCount > 0){
-            res.status(204).send();
+            res.status(200).json(response);
         }
         else
         {
