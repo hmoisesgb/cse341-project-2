@@ -103,7 +103,7 @@ const deleteEmployee = async(req, res) => {
         const employeeId = new ObjectID(req.params.id);
         const response = await mongodb.getDatabase().db().collection('employees').deleteOne({_id: employeeId});
         if (response.deletedCount > 0){
-            res.status(204).send();
+            res.status(204).json(response);
         }
         else
         {
