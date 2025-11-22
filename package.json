@@ -1,11 +1,15 @@
 {
   "name": "cse341-project2",
   "version": "1.0.0",
-  "description": "Employee Management",
+  "description": "Employee Management API",
   "license": "ISC",
   "author": "Haroldo Gonzalez",
   "type": "commonjs",
   "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hmoisesgb/cse341-project-2.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
