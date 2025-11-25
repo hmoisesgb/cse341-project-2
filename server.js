@@ -1,6 +1,11 @@
 const express = require('express');
 const mongodb = require('./data/database.js');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const session = require('express-session');
+const GitHubStrategy = require('passport-github').Strategy;
+const cors = require('cors');
+
 const app = express();
 
 process.on('uncaughtException', (err) => {
@@ -24,7 +29,44 @@ app.use((req, res, next)=>{
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     next();
 });
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session()); 
+app.use(cors({methods: ['GET','POST','PUT','DELETE','OPTIONS']}));
+app.use(cors({origin: '*'}));
 app.use('/', require('./routes'));
+
+passport.use(new GitHubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: process.env.GITHUB_CALLBACK_URL
+},
+function(accessToken, refreshToken, profile, done) {
+    return done(null, profile);
+}
+));
+
+passport.serializeUser((user, done) => {
+    done(null, user);
+});
+passport.deserializeUser((obj, done) => {
+    done(null, obj);
+});
+
+app.get('/', (req, res) => {
+    res.send(req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : 'Logged Out');
+});
+
+app.get('/github/callback', passport.authenticate('gitgub', {
+    failureRedirect: '/api-docs', session: false}),
+    (req, res) => {
+        req.session.user = req.user;
+        res.redirect('/');
+});
 
 mongodb.initDb((err) => {
     if(err){

@@ -11,19 +11,6 @@
     "https"
   ],
   "paths": {
-    "/": {
-      "get": {
-        "tags": [
-          "Welcome"
-        ],
-        "description": "Welcome message for the Employee Management API",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/employees/": {
       "get": {
         "tags": [
