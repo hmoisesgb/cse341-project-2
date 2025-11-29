@@ -53,8 +53,8 @@ function(accessToken, refreshToken, profile, done) {
 passport.serializeUser((user, done) => {
     done(null, user);
 });
-passport.deserializeUser((obj, done) => {
-    done(null, obj);
+passport.deserializeUser((user, done) => {
+    done(null, user);
 });
 
 app.get('/', (req, res) => {
